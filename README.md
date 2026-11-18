@@ -23,9 +23,8 @@ The one scientific acceptance scalar is the transverse flag-tip frequency:
 
 This is a proposed 5% engineering tolerance, not a tolerance stated by the
 article or a demonstrated architecture envelope. Bounds are 2.96875 to
-3.28125 Hz. Maintainers should review it before adoption. It tests the
-dominant oscillation frequency only, not displacement amplitude, stresses,
-mesh convergence, or full waveform correctness.
+3.28125 Hz. It tests the dominant oscillation frequency only, 
+not displacement amplitude, stresses, mesh convergence, or full waveform correctness.
 
 The run must reach 10 s. In t >= 6 s, compute the mean y displacement,
 interpolate positive-going crossings of this level linearly between actual
@@ -49,11 +48,9 @@ reference tip (9.5, 6, 0) cm. Fluid density 1.18e-3 g/cm^3, viscosity
 Young's modulus 2.5e6 g/(cm s^2), Poisson ratio 0.35. The XML preserves
 the inlet sign convention (-51.3), slip top/bottom walls, fixed block and
 flag root, outlet backflow coefficient 0.2, ALE mesh equation and interface
-projection. Q2 mesh paths and all boundary surfaces are included.
-
-**Model difference from the paper:** the supplied XML uses `nHK` plus
-`M94`; the paper specifies St. Venant-Kirchhoff elasticity. The paper also
-uses rho infinity 0.2 and runs for 5 s; this benchmark retains your current
+projection. Q2 mesh paths and all boundary surfaces are included. The supplied 
+XML uses `nHK` plus `M94`; the paper specifies St. Venant-Kirchhoff elasticity. 
+The paper also uses rho infinity 0.2 and runs for 5 s; this benchmark uses the
 rho infinity 0.5 setup and extends to 10 s. It is a frequency validation
 against that literature case, not an exact reproduction of every method.
 The input requires a solver with Trilinos GMRES and `trilinos-ml`; the
