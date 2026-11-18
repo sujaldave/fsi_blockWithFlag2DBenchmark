@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+"""Local execution context for the proposed upstream svbenchmark harness."""
+import argparse
+import os
+from pathlib import Path
+import shutil
+import sys
+
+def main():
+    import svbenchmark
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--solver", default=os.getenv("SVMP_EXECUTABLE", "svmultiphysics"))
+    parser.add_argument("--ranks", type=int, default=4)
+    parser.add_argument("--mpi-launcher", default="mpirun")
+    parser.add_argument("--mpi-arg", action="append", default=[])
+    args = parser.parse_args()
+    if args.ranks < 1: parser.error("--ranks must be positive")
+    executable = shutil.which(args.solver)
+    if executable is None: parser.error("Cannot find solver executable")
+    root = Path(__file__).resolve().parent
+    benchmark = svbenchmark.load_benchmark(root / "benchmark.toml")
+    context = svbenchmark.SolveExecutionContext(
+        solver_executable=Path(executable).resolve(), mpi_ranks=args.ranks,
+        mpi_launcher=args.mpi_launcher, mpi_args=tuple(args.mpi_arg))
+    result = svbenchmark.run_benchmark(benchmark, context)
+    svbenchmark.write_benchmark_json(result, root / "results.json")
+    return 0 if all(r.status == "pass" for r in result.evaluation.values()) else 1
+
+if __name__ == "__main__":
+    sys.exit(main())

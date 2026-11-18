@@ -1,0 +1,18 @@
+schema = 1
+name = "FSI square block with flexible flag, rhoInf 0.5"
+reference_source = "Esmaily-Moghadam et al., CMAME 286 (2015) 40-62, section 3.4, p.59: approximate period 0.32 s; reference frequency = 1/0.32 = 3.125 Hz"
+
+[preprocess.check_inputs]
+argv = ["python", "scripts/benchmark.py", "prepare"]
+
+[solver.rho0p5]
+input = "solver.xml"
+cwd = "case"
+
+[postprocess.tip_history]
+argv = ["python", "scripts/benchmark.py", "extract"]
+
+[evaluation.tip_y_frequency_hz]
+argv = ["python", "scripts/benchmark.py", "evaluate"]
+reference = 3.125
+rtol = 0.05
